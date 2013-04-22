@@ -1,0 +1,113 @@
+# A example configuration file. Works like IRCd config. Since nobody uses real
+# IRCds anymore, though, this is probably fairly nostalgic to many.
+# 
+# The options for whether a line is needed or not are: 
+# MANDATORY: you absolutely MUST have this line
+# SUGGESTED: it is highly suggested that you use this line
+# OPTIONAL: it's completely up to you whether to define this or not
+# DISCOURAGED: you really really should not use this line if at all
+#              possible. 
+#
+# Note that "*" in a field indicates an "unused" field.
+
+# M:line [MANDATORY]: Tells us about ourselves.
+# M:<server name>:<virtual host>:<description>:<nick>:<ident>:<server numeric>
+#
+# If you have no virtual host to use, supply *.
+M:A.invalid:10.8.0.6:God Mode Activated:A:TheABot:00S
+
+# O:line [SUGGESTED]: List of users with access.
+# O:<user@hostname>:<certfp>:<acctname>:<flags>
+#
+# You must supply the @ in the user@hostname field; if you do not wish to
+# restrict by ident, use *@hostname.
+# certfp is optional, but recommended. If you don't wish to use certfp, supply
+# * in the certfp field.
+# acctname specifies the services account name; this is the group display nick
+#   in Anope 1.8 (as propagated). Anope 1.8 shows that display nick only in two
+#   places: access lists and /ns glist of others. You should probably re-set it
+#   explicitly if you can't remember; it's usually the first nick registered,
+#   though.
+#   Atheme holds a separate accountname setting, which, on networks without
+#   nick registration, is free to set usually. On networks with nick
+#   registration, it must be one of the grouped nicks and can be found using
+#   /ns INFO.
+#   This field may be supplied with *, too.
+#
+# A valid O:line must have either certfp or acctname set to a non-empty value.
+# All fields but flags are case-insensitive.
+#
+# Available flags:
+# * - implies all flags
+# c - CHECKBAN
+# d - DIE and REHASH commands
+# f - SET: Able to change F:line options on-the-fly. Note that use of SET does
+#     not change the contents of the configuration file and thus is inferior to
+#     changing this file + rehash.
+# g - God -- cannot be affected by any commands on A and will be revenge killed
+#     by A if a kill happens to them for whatever reason. This option is
+#     strongly discouraged, but we all love power.
+# h - CHGHOST, CHGIDENT (CHGIDENT InspIRCd only)
+# i - USERLIST, CHANLIST, GETINFO
+# k - KILL (does not show killer, use with caution!)
+# n - GLOBAL
+# m - MODE (channel modes only)
+# s - SVS{JOIN,PART} (InspIRCd only)
+O:*culex@*.adslplus.ch:110eddf4f2b781e60625cc1d049e2c69:culex:*
+O:rb@i.exo.me.uk:*:peer:chik
+
+# U:line [OPTIONAL]: List of services servers.
+# U:<server name>
+#
+# U:lined servers' clients are exempt from KILLs sent by us unless sent by a
+# +g user. You can have multiple U:lines. Generally, you'll want services and
+# stats, which have services {} blocks or <uline> settings here as well.
+#
+# Do not list A!
+U:services.invalid
+U:stats.invalid
+
+# C:line [MANDATORY]: Where to connect to.
+# C:<remote hostname or IP>:<password>:<port>:<ssl>
+#
+# Currently, you can only have one C:line. As with Asuka, you do not need a
+# matching N:line; we've abolished those, meaning passwords are symmetric.
+#
+# SSL is a boolean field. If you use any value other than "true", we will
+# assume that we are *not* supposed to use SSL. This can be an easy mistake to
+# make and be very annoying to debug, so make sure you supply the correct value
+# here. Note that SSL is strongly recommended, even over loopback connections.
+C:10.8.0.1:linkage:4400:true
+
+# F:line [OPTIONAL]: Features and settings.
+# F:<setting>:<value>
+#
+# boolean fields here work the same as with SSL: Anything other than "true" is
+# "false". Commenting out also implies "false".
+#
+# require_oper [RECOMMENDED]: If true, only users with user mode +o will be
+#   able to elicit any kind of response from us.
+F:require_oper:true
+
+# protocol [MANDATORY]: Specifies the protocol to use. Currently, Charybdis is
+#   the only option you can supply here.
+F:protocol:Charybdis
+
+# debug [DISCOURAGED]: Prints all sorts of stuff to stdout. You really, really
+#   do not want this on a live network, unless you love spam. Raw in/out is not
+#   going to help you, as we have no passwords for authentication, so don't
+#   even think about spying.
+F:debug:false
+
+# abuse [DISCOURAGED]: Disables all operwalls about command usage.
+F:abuse:false
+
+# logchan [SUGGESTED]: Prints all command use in the given channel. Especially
+#   if abuse is false, you should enable this. To disable, use *, otherwise,
+#   provide a channel name.
+F:logchan:#a-spam
+
+# resv [SUGGESTED]: If true, A will attempt to RESV its nick so it can't be
+#   used by non-operators/non-services. RESVs are easy to remove.
+F:resv:true
+
