@@ -391,27 +391,11 @@ class CharybdisProtocol < Protocol
             "374 #{source} :End of /INFO list"]
   end
 
-  # Receives an INVITE message. Opers can invite A for the lulz.
-  #
-  # Returns nil if TS mismatch or a String to send for SJOINing.
+  # Sink INVITE. We have no user object for our pseudoclient. Unlike logchan,
+  # public channels matter, so we can't simply disregard the extra user (us),
+  # risking a desync.
   def msg_INVITE(source, args)
-    # :UID INVITE targetuid #channel [opt ts]
-    c = Channel.find_by_name(args[1])
-    s = User.find(source)
-    u = User.find(args[0])
-    if c == nil || source == nil || u == nil || !u.instance_of?(A) || !s.isoper
-      return nil
-    end
-
-    if args[2] != nil && args[2].to_i() > c.ts
-      return nil
-    end
-
-    # Send "+" as mode, trusting that no implementation of TS6 will apply modes
-    # coming from services if TS is equal
-    u.join(c)
-    c.add_user(u)
-    return sjoin_user(u, c)
+    return nil
   end
 
   # Deals with JOIN messages.
