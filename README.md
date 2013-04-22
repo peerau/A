@@ -33,3 +33,8 @@ extban mechanics, this won't happen unless a core dev really needs A on
 an InspIRCd network. A patch to implement this is going to be accepted,
 though.
 
+Contact
+-------
+
+You can find us on #a on irc.kottnet.net.
+
