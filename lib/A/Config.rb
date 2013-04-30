@@ -123,8 +123,9 @@ class AConfig
   # Reads a configuration file.
   # Arguments:
   # * A file path as String
-  def initialize(f)
-    @f = @path = nil
+  def initialize(path)
+    @f = nil
+    @path = path
     open_config()
     @bot = []
     parse_config(false)
