@@ -9,22 +9,12 @@ class Oper
   attr_reader :flags
 
   def initialize(userhost, certfp, acctname, flags)
-    if !userhost.include?('@')
-      raise(ArgumentError, "user@host must include @ sign")
-    end
+    raise(ArgumentError, "user@host must include @ sign") if !userhost.include?('@')
     uh = userhost.split('@')
     @ident = uh[0]
     @host = uh[1]
-    @certfp = if certfp.empty?() || certfp == '*'
-                nil
-              else
-                certfp
-              end
-    @account = if acctname.empty?() || acctname == '*'
-                 nil
-               else
-                 acctname
-               end
+    @certfp = (certfp.empty?() || certfp == '*') ? nil : certfp
+    @account = (acctname.empty?() || acctname == '*') ? nil : acctname
     @flags = flags
   end
 
@@ -45,7 +35,7 @@ class Oper
     #identmatch = match(@ident, u.ident, true)
     #hostmatch = match(@host, u.rhost, true)
     #certfpmatch = u.certfp && @certfp && u.certfp
-    return Match.match(@ident, u.ident, true) && (Match.match(@host, u.rhost, true) ||
+    Match.match(@ident, u.ident, true) && (Match.match(@host, u.rhost, true) ||
                                                   Match.match(@host, u.ip, true))
       ((u.certfp && @certfp && u.certfp == @certfp) ||
       (u.su && @account && u.su == @account)) &&
@@ -54,7 +44,7 @@ class Oper
   end
 
   def to_stats_string()
-    return "#{@ident}@#{@host} #{@certfp ? @certfp : '*'} #{@account ? @account : '*'} #{@flags}"
+    "#{@ident}@#{@host} #{@certfp ? @certfp : '*'} #{@account ? @account : '*'} #{@flags}"
   end
 end
 
@@ -67,9 +57,7 @@ class AConfig
   BooleanOptions = %w{require_oper debug abuse resv}
 
   def open_config()
-    if @f != nil
-      @f.close()
-    end
+    @f.close() if @f != nil
     @f = File.open(@path, 'r')
   end
 
@@ -77,22 +65,16 @@ class AConfig
   # Arguments:
   # * Are we rehashing?
   def parse_config(rehash)
-    if rehash
-      open_config()
-    end
+    open_config() if rehash
     @opers = []
     @ulines = []
     @options = {}
     
     while true
       line = @f.gets("\n")
-      if line == nil
-        break
-      end
+      break if line == nil
       line.chomp!()
-      if line.empty?() || line[0] == '#'
-        next
-      end
+      next if line.empty?() || line[0] == '#'
       # O:lines need special treatment because of IPv6
       fields = []
       fields = line.split(':')
@@ -116,9 +98,7 @@ class AConfig
 
       case char
       when 'M'
-        if rehash
-          next
-        end
+        next if rehash
         @server = Server.new(fields[5], fields[0], fields[2])
         @vhost = fields[1]
         @bot = {'nick' => fields[3], 'ident' => fields[4], 'host' => fields[0]}
@@ -127,35 +107,24 @@ class AConfig
       when 'U'
         @ulines.push(fields[0])
       when 'C'
-        if rehash
-          next
-        end
+        next if rehash
         @uplink = {'host' => fields[0], 'password' => fields[1],
           'port' => fields[2].to_i(), 'ssl' => (fields[3] == 'true')}
       when 'F'
         val = fields[1]
-        if BooleanOptions.include?(fields[0])
-          val = if fields[1] == 'true'
-                  true
-                else
-                  false
-                end
-        end
+        val = (fields[1] == 'true') if BooleanOptions.include?(fields[0])
         @options[fields[0]] = val
       end
     end
 
-    if @options['logchan'] == nil
-      @options['logchan'] = '*'
-    end
+    @options['logchan'] = '*' if @options['logchan'] == nil
   end
 
   # Reads a configuration file.
   # Arguments:
   # * A file path as String
   def initialize(f)
-    @f = nil
-    @path = f
+    @f = @path = nil
     open_config()
     @bot = []
     parse_config(false)
@@ -167,19 +136,15 @@ class AConfig
     @opers.each do |oper|
       if oper.can_access(u)
         puts("flags: #{oper.flags}") if $config.options['debug']
-        if f == nil
-          return true
-        else
-          return oper.flags.include?(f) || oper.flags.include?('*')
-        end
+        return (f == nil) ? true : oper.flags.include?(f) || oper.flags.include?('*')
       end
     end
 
-    return false
+    false
   end
 
   def is_boolean_opt(opt)
-    return BooleanOptions.include?(opt)
+    BooleanOptions.include?(opt)
   end
 end
 
