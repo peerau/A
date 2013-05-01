@@ -944,7 +944,7 @@ class CharybdisProtocol < Protocol
   end
 
   def do_RSFNC(u, n)
-    if !u.is_a(User)?
+    if !u.is_a?(User)
       u = User.find_by_nick(u)
       return if u == nil
     end
