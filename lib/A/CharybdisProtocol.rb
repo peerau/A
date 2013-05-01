@@ -950,7 +950,10 @@ class CharybdisProtocol < Protocol
     end
 
     return if n == nil
-    ircsend(":#{$config.server.sid} ENCAP #{u.server.name} RSFNC #{u.uid} #{n} #{Time.now().to_i()} #{u.ts}", @conn)
+    now = Time.now().to_i()
+    ircsend(":#{$config.server.sid} ENCAP #{u.server.name} RSFNC #{u.uid} #{n} #{now} #{u.ts}", @conn)
+    u.nick = n
+    u.ts = now
   end
 end
 

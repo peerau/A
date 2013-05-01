@@ -13,7 +13,7 @@ class User
   # ident could be changed on Insp IIRC
   # ts can be changed on Chary by nick
   # gecos can be changed on Insp via /setname and /chgname
-  attr_accessor :nick, :ident, :dhost, :isoper, :certfp, :su, :ts, :gecos
+  attr_accessor :ident, :dhost, :isoper, :certfp, :su, :ts, :gecos
 
   # Matches the lowest common denominator between Charybdis TS6 EUID and
   # InspIRCd UID.
@@ -81,6 +81,16 @@ class User
 
   def info_str()
     return "#{@nick}(#{@uid})!#{@ident}@#{@dhost}(#{@rhost}##{@ip}){#{@server.name}}/#{@gecos}"
+  end
+
+  def nick()
+    return @nick
+  end
+
+  def nick=(nick)
+    @@users_by_nick.delete(Channel.to_lower(@nick))
+    @nick = nick
+    @@users_by_nick[Channel.to_lower(@nick)] = self
   end
 
   # Returns User object or nil.
