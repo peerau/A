@@ -469,7 +469,7 @@ class CommandSvsNick < Command
     end
     nick = args[1]
 
-    if (nick =~ /^[a-z{}_\[\]|\\^`][a-z0-9{}_\[\]|\\^`-]*/i) == 0
+    if (nick =~ /^[a-z{}_\[\]|\\^`][a-z0-9{}_\[\]|\\^`-]*$/i) == 0
       if User.find_by_nick(nick) == nil
         @proto.do_RSFNC(target, args[1])
         @proto.do_NOTICE(u, "User #{args[0]}'s nick has been changed to #{args[1]}.")
