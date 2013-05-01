@@ -491,6 +491,7 @@ class Commands
   def initialize(proto)
     @proto = proto
     @commands = [
+      CommandChanList.new(proto),
       CommandCheckBan.new(proto),
       CommandChgHost.new(proto),
       CommandDie.new(proto),
@@ -501,9 +502,8 @@ class Commands
       CommandMode.new(proto),
       CommandRehash.new(proto),
       CommandSet.new(proto),
-      CommandUserList.new(proto),
-      CommandChanList.new(proto),
       CommandSvsNick.new(proto),
+      CommandUserList.new(proto),
     ]
   end
 
