@@ -478,7 +478,7 @@ class CommandSvsNick < Command
         return false
       end
     else
-      @proto.do_NOTICE(u, "'#{args[1]}' is not a valid nickname!"
+      @proto.do_NOTICE(u, "'#{args[1]}' is not a valid nickname!")
       return false
     end
   end
