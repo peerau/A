@@ -466,10 +466,20 @@ class CommandSvsNick < Command
       @proto.do_NOTICE(u, "Could not find user #{args[0]}.")
       return false
     end
-    if User.find_by_nick(args[1]).nil?
-      @proto.do_RSFNC(target, args[1])
-      @proto.do_NOTICE(u, "User #{args[0]}'s nick has been changed to #{args[1]}.")
-      return true
+    nick = args[1]
+
+    if (nick =~ /^[a-z{}_\[\]|\\^`][a-z0-9{}_\[\]|\\^`-]*/i) == 0
+      if User.find_by_nick(nick) == nil
+        @proto.do_RSFNC(target, args[1])
+        @proto.do_NOTICE(u, "User #{args[0]}'s nick has been changed to #{args[1]}.")
+        return true
+      else
+        @proto.do_NOTICE(u, "Someone is using #{args[1]}!")
+        return false
+      end
+    else
+      @proto.do_NOTICE(u, "'#{args[1]}' is not a valid nickname!"
+      return false
     end
   end
 end
