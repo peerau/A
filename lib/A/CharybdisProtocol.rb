@@ -928,7 +928,7 @@ class CharybdisProtocol < Protocol
   def do_PART(c)
     if !c.is_a?(Channel)
       c = Channel.find_by_name(c)
-      return if c.nil?
+      return if c == nil
     end
 
     ircsend(":#{$config.server.sid}AAAAAA PART #{c.name}", @conn)
@@ -946,7 +946,7 @@ class CharybdisProtocol < Protocol
   def do_RSFNC(u, n)
     if !u.is_a(User)?
       u = User.find_by_nick(u)
-      return if u.nil?
+      return if u == nil
     end
 
     return if n.nil?
