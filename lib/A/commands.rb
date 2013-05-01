@@ -156,17 +156,18 @@ an uncensored channel list.",
     @proto.do_NOTICE(u, target.info_str())
     if target.channels.empty?()
       @proto.do_NOTICE(u, "No channels.")
-    end
-    cs = "Channels:"
-    target.channels.each do |c|
-      if (cs.length + c.name.length + 1) > 480
-        cs << "\n"
+    else
+      cs = "Channels:"
+      target.channels.each do |c|
+        if (cs.length + c.name.length + 1) > 480
+          cs << "\n"
+        end
+        cs << " " << c.name
       end
-      cs << " " << c.name
-    end
 
-    cs.split("\n").each do |c|
-      @proto.do_NOTICE(u, c)
+      cs.split("\n").each do |c|
+        @proto.do_NOTICE(u, c)
+      end
     end
 
     return true
