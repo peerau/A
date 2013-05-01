@@ -432,7 +432,7 @@ class CommandChanList < Command
   def initialize(proto)
     super('CHANLIST', 'i', proto, "CHANLIST #channel",
          'List users in a channel',
-"Lists the users and their status as they are in a channel.",
+"Lists the users in a channel.",
          1)
   end
 
@@ -447,6 +447,28 @@ class CommandChanList < Command
         @proto.do_NOTICE(u, user.info_str())
       end
       @proto.do_NOTICE(u, "End of CHANLIST.")
+      return true
+    end
+  end
+end
+
+class CommandSvsNick < Command
+  def initialize(proto)
+    super('SVSNICK', 's', proto, "SVSNICK nick newnick",
+         "Changes a user's nick",
+"Changes a user's nick. Will not change a user to someone else's nick.",
+         2)
+  end
+
+  def run(u, args)
+    target = User.find_by_nick(args[0])
+    if target == nil
+      @proto.do_NOTICE(u, "Could not find user #{args[0]}.")
+      return false
+    end
+    if User.find_by_nick(args[1]).nil?
+      @proto.do_RSFNC(target, args[1])
+      @proto.do_NOTICE(u, "User #{args[0]}'s nick has been changed to #{args[1]}.")
       return true
     end
   end
@@ -470,6 +492,7 @@ class Commands
       CommandSet.new(proto),
       CommandUserList.new(proto),
       CommandChanList.new(proto),
+      CommandSvsNick.new(proto),
     ]
   end
 

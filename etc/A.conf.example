@@ -52,7 +52,7 @@ M:A.invalid:10.8.0.6:God Mode Activated:A:TheABot:00S
 # k - KILL (does not show killer, use with caution!)
 # n - GLOBAL
 # m - MODE (channel modes only)
-# s - SVS{JOIN,PART} (InspIRCd only)
+# s - SVS{JOIN*,PART*,NICK} (* InspIRCd Only)
 O:*culex@*.adslplus.ch:110eddf4f2b781e60625cc1d049e2c69:culex:*
 O:rb@i.exo.me.uk:*:peer:chik
 
