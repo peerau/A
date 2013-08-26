@@ -13,7 +13,7 @@ class User
   # ident could be changed on Insp IIRC
   # ts can be changed on Chary by nick
   # gecos can be changed on Insp via /setname and /chgname
-  attr_accessor :ident, :dhost, :isoper, :isadmin, :certfp, :su, :ts, :gecos
+  attr_accessor :ident, :dhost, :isoper, :isadmin, :olevel, :certfp, :su, :ts, :gecos
 
   # Matches the lowest common denominator between Charybdis TS6 EUID and
   # InspIRCd UID.
@@ -21,6 +21,13 @@ class User
     # We only care about this one umode anyway
     @isoper = umodestr.include?('o')
     @isadmin = umodestr.include?('a')
+    @olevel = if @isadmin
+                "admin"
+              elsif @isoper
+                "oper"
+              else
+	        nil
+              end
     @uid = uid
     @nick = nick
     @ident = ident

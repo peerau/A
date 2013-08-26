@@ -79,6 +79,13 @@ U:stats.invalid
 # here. Note that SSL is strongly recommended, even over loopback connections.
 C:10.8.0.1:linkage:4400:true
 
+# L:line [DISCOURAGED]: Default flags for opers with o-lines on the ircd.
+# L:<operflags>:<adminflags>
+#
+# You MUST change the levels F:line to true to use this
+L:ci:chikms
+
+
 # F:line [OPTIONAL]: Features and settings.
 # F:<setting>:<value>
 #
@@ -110,4 +117,8 @@ F:logchan:#a-spam
 # resv [SUGGESTED]: If true, A will attempt to RESV its nick so it can't be
 #   used by non-operators/non-services. RESVs are easy to remove.
 F:resv:true
+
+# levels [DISCOURAGED]: Enables "default" permissions for anyone with an o-line
+#   on the ircd.
+F:levels:false
 
