@@ -156,17 +156,18 @@ an uncensored channel list.",
     @proto.do_NOTICE(u, target.info_str())
     if target.channels.empty?()
       @proto.do_NOTICE(u, "No channels.")
-    end
-    cs = "Channels:"
-    target.channels.each do |c|
-      if (cs.length + c.name.length + 1) > 480
-        cs << "\n"
+    else
+      cs = "Channels:"
+      target.channels.each do |c|
+        if (cs.length + c.name.length + 1) > 480
+          cs << "\n"
+        end
+        cs << " " << c.name
       end
-      cs << " " << c.name
-    end
 
-    cs.split("\n").each do |c|
-      @proto.do_NOTICE(u, c)
+      cs.split("\n").each do |c|
+        @proto.do_NOTICE(u, c)
+      end
     end
 
     return true
@@ -468,7 +469,7 @@ class CommandSvsNick < Command
     end
     nick = args[1]
 
-    if (nick =~ /^[a-z{}_\[\]|\\^`][a-z0-9{}_\[\]|\\^`-]*/i) == 0
+    if (nick =~ /^[a-z{}_\[\]|\\^`][a-z0-9{}_\[\]|\\^`-]*$/i) == 0
       if User.find_by_nick(nick) == nil
         @proto.do_RSFNC(target, args[1])
         @proto.do_NOTICE(u, "User #{args[0]}'s nick has been changed to #{args[1]}.")
@@ -490,6 +491,7 @@ class Commands
   def initialize(proto)
     @proto = proto
     @commands = [
+      CommandChanList.new(proto),
       CommandCheckBan.new(proto),
       CommandChgHost.new(proto),
       CommandDie.new(proto),
@@ -500,9 +502,8 @@ class Commands
       CommandMode.new(proto),
       CommandRehash.new(proto),
       CommandSet.new(proto),
-      CommandUserList.new(proto),
-      CommandChanList.new(proto),
       CommandSvsNick.new(proto),
+      CommandUserList.new(proto),
     ]
   end
 

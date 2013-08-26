@@ -35,12 +35,14 @@ class Oper
     #identmatch = match(@ident, u.ident, true)
     #hostmatch = match(@host, u.rhost, true)
     #certfpmatch = u.certfp && @certfp && u.certfp
-    Match.match(@ident, u.ident, true) && (Match.match(@host, u.rhost, true) ||
+    ret = Match.match(@ident, u.ident, true) && (Match.match(@host, u.rhost, true) ||
                                                   Match.match(@host, u.ip, true))
       ((u.certfp && @certfp && u.certfp == @certfp) ||
       (u.su && @account && u.su == @account)) &&
       # Invalid O:line
       !(!@account && !@certfp)
+
+    return ret
   end
 
   def to_stats_string()
@@ -50,11 +52,11 @@ end
 
 # Configuration file gateway.
 class AConfig
-  attr_reader :server, :vhost, :ulines, :options, :uplink, :bot, :opers
+  attr_reader :server, :vhost, :ulines, :options, :uplink, :bot, :opers, :levels
 
   # argument count for line type
-  ArgumentCount = {'M' => 6, 'O' => 4, 'U' => 1, 'C' => 4, 'F' => 2}
-  BooleanOptions = %w{require_oper debug abuse resv}
+  ArgumentCount = {'M' => 6, 'O' => 4, 'U' => 1, 'C' => 4, 'L' => 2, 'F' => 2}
+  BooleanOptions = %w{require_oper debug abuse resv levels}
 
   def open_config()
     @f.close() if @f != nil
@@ -110,6 +112,8 @@ class AConfig
         next if rehash
         @uplink = {'host' => fields[0], 'password' => fields[1],
           'port' => fields[2].to_i(), 'ssl' => (fields[3] == 'true')}
+      when 'L'
+        @levels = {'oper' => fields[0], 'admin' => fields[1]}
       when 'F'
         val = fields[1]
         val = (fields[1] == 'true') if BooleanOptions.include?(fields[0])
@@ -137,11 +141,18 @@ class AConfig
     @opers.each do |oper|
       if oper.can_access(u)
         puts("flags: #{oper.flags}") if $config.options['debug']
-        return (f == nil) ? true : oper.flags.include?(f) || oper.flags.include?('*')
+        ret = oper.flags.include?(f) || oper.flags.include?('*')
       end
     end
 
-    false
+    if $config.options['levels']
+      if u.isoper || u.isadmin
+        puts("lflags: #{$config.levels[u.olevel]}")
+	ret = $config.levels[u.olevel].include?(f)
+      end
+    end
+
+    return ret
   end
 
   def is_boolean_opt(opt)
