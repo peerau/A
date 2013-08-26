@@ -26,7 +26,7 @@ class User
               elsif @isoper
                 "oper"
               else
-	        nil
+	              nil
               end
     @uid = uid
     @nick = nick
