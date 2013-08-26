@@ -35,14 +35,12 @@ class Oper
     #identmatch = match(@ident, u.ident, true)
     #hostmatch = match(@host, u.rhost, true)
     #certfpmatch = u.certfp && @certfp && u.certfp
-    ret = Match.match(@ident, u.ident, true) && (Match.match(@host, u.rhost, true) ||
+    Match.match(@ident, u.ident, true) && (Match.match(@host, u.rhost, true) ||
                                                   Match.match(@host, u.ip, true))
       ((u.certfp && @certfp && u.certfp == @certfp) ||
       (u.su && @account && u.su == @account)) &&
       # Invalid O:line
       !(!@account && !@certfp)
-
-    return ret
   end
 
   def to_stats_string()
@@ -138,6 +136,7 @@ class AConfig
   # Returns true if the given user has the given flag and permission to use A.
   # Flag may be nil to ask if A is supposed to respond at all
   def has_flag(u, f)
+    ret = false
     @opers.each do |oper|
       if oper.can_access(u)
         puts("flags: #{oper.flags}") if $config.options['debug']
