@@ -13,13 +13,14 @@ class User
   # ident could be changed on Insp IIRC
   # ts can be changed on Chary by nick
   # gecos can be changed on Insp via /setname and /chgname
-  attr_accessor :ident, :dhost, :isoper, :certfp, :su, :ts, :gecos
+  attr_accessor :ident, :dhost, :isoper, :isadmin, :certfp, :su, :ts, :gecos
 
   # Matches the lowest common denominator between Charybdis TS6 EUID and
   # InspIRCd UID.
   def initialize(server, uid, nick, ident, dhost, rhost, ip, ts, umodestr, gecos)
     # We only care about this one umode anyway
     @isoper = umodestr.include?('o')
+    @isadmin = umodestr.include?('a')
     @uid = uid
     @nick = nick
     @ident = ident
