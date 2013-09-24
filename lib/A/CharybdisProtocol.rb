@@ -508,22 +508,30 @@ class CharybdisProtocol < Protocol
              end
     return nil if adding == nil
 
-    # +o is the only umode we care about
+    # +o and +a are the only umodes we care about
     args[1].each_char do |c|
-      if c != 'o'
-        if c == '+'
-          adding = true
-        elsif c == '-'
-          adding = false
+      if c == '+'
+        adding = true
+      elsif c == '-'
+        adding = false
+      elsif c == 'o'
+        if adding and u.olevel != 'admin'
+          u.olevel = 'oper'
         end
-
-        next
-      end
-
-      if adding
-        u.isoper = true
-      else
-        u.isoper = false
+        if !adding
+          u.isoper = false
+          u.olevel = nil
+        else
+          u.isoper = true
+        end
+      elsif c == 'a'
+        if adding
+          u.olevel = 'admin'
+          u.isadmin = true
+        else
+          u.isadmin = false
+          u.olevel = nil
+        end
       end
     end
 
