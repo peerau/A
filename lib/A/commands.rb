@@ -519,6 +519,7 @@ class Commands
       CommandDie.new(proto),
 #      CommandForceAuth.new(proto),
       CommandGetInfo.new(proto),
+      CommandGeoIP.new(proto),
       CommandGlobal.new(proto),
       CommandKill.new(proto),
       CommandMode.new(proto),
