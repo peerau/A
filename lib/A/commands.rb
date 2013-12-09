@@ -177,24 +177,33 @@ end
 class CommandGeoIP < Command
   def initialize(proto)
     super('GEOLOC', 'i', proto, "GEOLOC nick",
-         'Prints Geolocational info about a user',
-"Shows a users Location by IP and their ASN information",
-         1)
+     'Prints Geolocational info about a user',
+     "Shows a users Location by IP and their ASN information",
+     1)
   end
 
   def run(u, args)
-    nick = args.shift()
-    target = User.find_by_nick(nick)
-    if target == nil
-      @proto.do_NOTICE(u, "#{nick} not found.")
-      return false
+      # GeoIP
+      if $config.options['geoip']
+        require 'geoip'
+        geoip = GeoIP.new(File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "etc", "geoip", "GeoLiteCityv6.dat")))
+      else
+        puts("!! GeoIP not enabled..")
+        @proto.do_NOTICE(u, "GEOLOC not enabled.")
+        return false
+      end
+      nick = args.shift()
+      target = User.find_by_nick(nick)
+      if target == nil
+        @proto.do_NOTICE(u, "#{nick} not found.")
+        return false
+      end
+
+      @proto.do_NOTICE(u, target.geo_str(geoip))
+
+      return true
     end
-
-    @proto.do_NOTICE(u, target.geo_str())
-
-    return true
   end
-end
 
 class CommandMode < Command
   def initialize(proto)
