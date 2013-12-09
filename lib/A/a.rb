@@ -113,6 +113,7 @@ def start_A()
     $geoip = GeoIP.new(File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "etc", "geoip", "GeoLiteCityv6.dat")))
   else
     puts("!! GeoIP not enabled..")
+  end
 end
 
 def pseudostart(proto)
