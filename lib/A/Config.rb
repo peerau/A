@@ -54,7 +54,7 @@ class AConfig
 
   # argument count for line type
   ArgumentCount = {'M' => 6, 'O' => 4, 'U' => 1, 'C' => 4, 'L' => 2, 'F' => 2}
-  BooleanOptions = %w{require_oper debug abuse resv levels}
+  BooleanOptions = %w{require_oper debug abuse resv levels geoip}
 
   def open_config()
     @f.close() if @f != nil

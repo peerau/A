@@ -106,6 +106,13 @@ def start_A()
     puts("No valid F:protocol line. quitting")
     exit 1
   end
+
+  # GeoIP
+  if $config.options['geoip']
+    require 'geoip'
+    $geoip = GeoIP.new(File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "etc", "geoip", "GeoLiteCityv6.dat")))
+  else
+    puts("!! GeoIP not enabled..")
 end
 
 def pseudostart(proto)

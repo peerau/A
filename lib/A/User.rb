@@ -91,6 +91,11 @@ class User
     return "#{@nick}(#{@uid})!#{@ident}@#{@dhost}(#{@rhost}##{@ip}){#{@server.name}}/#{@gecos}"
   end
 
+  def geo_str()
+    city = $geoip.city(@rhost)
+    return "#{@nick} is connecting from: #{city.city_name}, #{city.real_region_name}, #{city.country_name}. Timezone: #{city.timezone}"
+  end
+
   def nick()
     return @nick
   end

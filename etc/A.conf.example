@@ -122,3 +122,7 @@ F:resv:true
 #   on the ircd.
 F:levels:false
 
+# geoip [OPTIONAL]: Enables the MaxMind GeoIPv6 and GeoASNv6 databases, enabling the
+# geoloc command
+F:geoip:true
+
