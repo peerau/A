@@ -171,6 +171,8 @@ class AConfig
     if !ret
       ret = "(none)"
     end
+
+    return ret
   end
 end
 
