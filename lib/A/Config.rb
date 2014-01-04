@@ -159,5 +159,24 @@ class AConfig
   def is_boolean_opt(opt)
     BooleanOptions.include?(opt)
   end
+
+  def get_flags(u)
+    ret = false
+    @opers.each do |oper|
+      if oper.can_access(u)
+        ret = oper.flags
+      end
+    end
+
+    if !ret
+      if $config.options['levels']
+        if u.isoper || u.isadmin
+          ret = $config.levels[u.olevel]
+        end
+      end
+    end
+    
+    return ret
+  end
 end
 

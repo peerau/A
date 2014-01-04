@@ -840,9 +840,10 @@ class CharybdisProtocol < Protocol
 
       ret = [":#{@server.sid}AAAAAA NOTICE #{u.uid} :Commands known to me:"]
       @commandmanager.commands.each do |c|
-        ret.push(sprintf(":%sAAAAAA NOTICE %s : %-10s %s", @server.sid, u.uid,
-                        c.name, c.shorthelp))
+        ret.push(sprintf(":%sAAAAAA NOTICE %s : [%s] %-10s %s", @server.sid, u.uid,
+                        c.flag, c.name, c.shorthelp))
       end
+      ret.push(":#{@server.sid}AAAAAA NOTICE #{u.uid} :Your flags are #{get_flags(u)}.")
       ret.push(":#{@server.sid}AAAAAA NOTICE #{u.uid} :End of command listing.")
       return ret
     end
