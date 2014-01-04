@@ -843,7 +843,7 @@ class CharybdisProtocol < Protocol
         ret.push(sprintf(":%sAAAAAA NOTICE %s : [%s] %-10s %s", @server.sid, u.uid,
                         c.flag, c.name, c.shorthelp))
       end
-      ret.push(":#{@server.sid}AAAAAA NOTICE #{u.uid} :Your flags are #{get_flags(u)}.")
+      ret.push(":#{@server.sid}AAAAAA NOTICE #{u.uid} :Your flags are #{$config.get_flags(u)}.")
       ret.push(":#{@server.sid}AAAAAA NOTICE #{u.uid} :End of command listing.")
       return ret
     end
