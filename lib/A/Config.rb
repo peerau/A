@@ -144,13 +144,9 @@ class AConfig
       end
     end
 
-    if !ret
-      if $config.options['levels']
-        if u.isoper || u.isadmin
-          puts("lflags: #{$config.levels[u.olevel]}")
-  	      ret = $config.levels[u.olevel].include?(f)
-        end
-      end
+    if !ret && $config.options['levels'] && (u.isoper || u.isadmin)
+      puts("lflags: #{$config.levels[u.olevel]}")
+      ret = $config.levels[u.olevel].include?(f)
     end
     
     return ret
@@ -168,15 +164,13 @@ class AConfig
       end
     end
 
-    if !ret
-      if $config.options['levels']
-        if u.isoper || u.isadmin
-          ret = $config.levels[u.olevel]
-        end
-      end
+    if !ret && $config.options['levels'] && (u.isoper || u.isadmin)
+      ret = $config.levels[u.olevel]
     end
     
-    return ret
+    if !ret
+      ret = "(none)"
+    end
   end
 end
 
