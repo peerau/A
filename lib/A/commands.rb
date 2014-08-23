@@ -268,7 +268,7 @@ given, all channels will be checked. Great fun, that.",
                end
       @proto.do_NOTICE(u, "#{target.nick} is banned from #{c.name} (#{banstr}).")
     end
-    @proto.do_NOTICE(u, "End of ban list for #{target.nick}:")
+    @proto.do_NOTICE(u, "End of ban list for #{target.nick}.")
 
     return true
   end
