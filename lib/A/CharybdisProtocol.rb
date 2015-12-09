@@ -734,18 +734,11 @@ class CharybdisProtocol < Protocol
         adding = true
       when '-'
         adding = false
-      when 'b'
+      when 'b', 'e'
         if adding
-          c.add_ban(modes[1 + offset], 'b')
+          c.add_ban(modes[1 + offset], char)
         else
-          c.del_ban(modes[1 + offset], 'b')
-        end
-        offset += 1
-      when 'e'
-        if adding
-          char.add_ban(modes[1 + offset], 'e')
-        else
-          char.del_ban(modes[1 + offset], 'e')
+          c.del_ban(modes[1 + offset], char)
         end
         offset += 1
       when 'q', 'k', 'l', 'I', 'f', 'j', 'o', 'v'
