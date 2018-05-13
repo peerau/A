@@ -36,5 +36,5 @@ though.
 Contact
 -------
 
-You can find us on #a on irc.freenode.net and irc.kottnet.net.
+You can find us on #a on irc.freenode.net.
 
